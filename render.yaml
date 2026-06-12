@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: university-management-platform
+    runtime: python
+    plan: free
+    region: ohio
+    repo: https://github.com/haiderrrrrrr/university-management-platform
+    branch: master
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn SMS.wsgi:application
+    healthCheckPath: /accounts/login/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: university-management-platform-mgdq.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://university-management-platform-mgdq.onrender.com
+      - key: DATABASE_URL
+        sync: false
